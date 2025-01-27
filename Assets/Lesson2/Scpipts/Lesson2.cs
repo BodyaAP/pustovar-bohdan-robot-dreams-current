@@ -25,10 +25,9 @@ public class Lesson2 : MonoBehaviour
     [ContextMenu("Get Item")]
     private void GetItem()
     {
-        string item = Strings.Find(i => i == value);
-        if (!string.IsNullOrEmpty(item))
+        if (Strings.Contains(value))
         {
-            Debug.Log(item);
+            Debug.Log(value);
         }
         else
         {
@@ -39,16 +38,22 @@ public class Lesson2 : MonoBehaviour
     [ContextMenu("Add Item")]
     private void AddItem()
     {
-        Strings.Add(value);
+        if (value != string.Empty)
+        {
+            Strings.Add(value);
+        }
+        else
+        {
+            Debug.Log($"Fild value is emptty");
+        }
     }
 
     [ContextMenu("Remove Item")]
     private void RemoveItem()
     {
-        string item = Strings.Find(i => i == value);
-        if (!string.IsNullOrEmpty(item))
+        if (Strings.Remove(value))
         {
-            Strings.Remove(value);
+            Debug.Log($"{value} is deleted");
         }
         else
         {
