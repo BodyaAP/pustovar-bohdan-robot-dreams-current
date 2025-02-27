@@ -92,7 +92,7 @@
                 {
                     "name": "",
                     "id": "494d78b9-7252-41b7-8c61-f4c579a21ba0",
-                    "path": "<DualSenseGamepadHID>/leftStick",
+                    "path": "<Gamepad>/leftStick",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -114,9 +114,9 @@
                 {
                     "name": "",
                     "id": "ec6472f5-66a1-47d4-817c-4f6c148d8a48",
-                    "path": "<DualSenseGamepadHID>/rightStick",
+                    "path": "<Gamepad>/rightStick",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "ScaleVector2(x=5,y=5)",
                     "groups": "",
                     "action": "LookAround",
                     "isComposite": false,
@@ -136,7 +136,7 @@
                 {
                     "name": "",
                     "id": "da7b373d-ea77-4a41-ae1a-a31a91291a6a",
-                    "path": "<DualSenseGamepadHID>/rightTrigger",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

@@ -22,14 +22,19 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        _pitchAnchor.localRotation = Quaternion.Euler(0f, _pitch, 0f);
-        _yawAnchor.localRotation = Quaternion.Euler(_yaw, 0f, 0f);
+        _pitch -= _lookInput.y * _sensitivity * Time.deltaTime;
+        _yaw += _lookInput.x * _sensitivity * Time.deltaTime;
+
+        _pitchAnchor.localRotation = Quaternion.Euler(_pitch, 0f, 0f);
+        _yawAnchor.localRotation = Quaternion.Euler(0f, _yaw, 0f);
     }
 
     private void LookHandler(Vector2 lookInput)
     {
-        lookInput *= _sensitivity;
-        _pitch += lookInput.x;
-        _yaw += lookInput.y;
+        //lookInput *= _sensitivity;
+        //_pitch += lookInput.x;
+        //_yaw += lookInput.y;
+
+        _lookInput = lookInput;
     }
 }

@@ -546,9 +546,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d28b8015efa02794a92c51d4550dbacf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pitchAnchor: {fileID: 1328414412}
-  _yawAnchor: {fileID: 1284986764}
-  _sensitivity: 0.1
+  _pitchAnchor: {fileID: 1284986764}
+  _yawAnchor: {fileID: 1328414412}
+  _sensitivity: 50
 --- !u!1001 &1209559571
 PrefabInstance:
   m_ObjectHideFlags: 0
