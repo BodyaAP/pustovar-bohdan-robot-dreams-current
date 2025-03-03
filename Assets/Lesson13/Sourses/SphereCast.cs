@@ -63,7 +63,8 @@ public class SphereCast : MonoBehaviour
         shot.distance = (hitPoint - muzzlePosition /*_muzzleTransform.position*/).magnitude;
         shot.outerPropertyBlock = new MaterialPropertyBlock();
 
-        isLeftGunBarrel = isLeftGunBarrel ? false : true;
+        //isLeftGunBarrel = isLeftGunBarrel ? false : true;
+        isLeftGunBarrel = !isLeftGunBarrel;
 
         StartCoroutine(ShotRoutine(shot));
 
