@@ -23,6 +23,12 @@ public class SphereCast : MonoBehaviour
 
     [SerializeField] private GunAimer _aimer;
 
+    [SerializeField] private GameObject _muzzleFlashPrefab;
+    [SerializeField] private bool _unparentMuzzleFlash;
+    [SerializeField] private GameObject _impactVfx;
+    [SerializeField] private float _impactVfxLifetime = 5f;
+    [SerializeField] private float _impactVfsSpawnOffset = 0.1f;
+
     private int _tilingId;
     private bool isLeftGunBarrel = true;
 
@@ -44,23 +50,47 @@ public class SphereCast : MonoBehaviour
 
     private void SphereCastInputHandler()
     {
-        Vector3 muzzlePosition = isLeftGunBarrel ? _muzzleLeftTransform.position : _muzzleRightTransform.position; //_muzzleTransform.position;
-        Vector3 muzzleForward = isLeftGunBarrel ? _muzzleLeftTransform.forward : _muzzleRightTransform.forward;
-        Quaternion muzzleRotation = isLeftGunBarrel ? _muzzleLeftTransform.rotation : _muzzleRightTransform.rotation;
-        Ray ray = new Ray(muzzlePosition, muzzleForward);
-        Vector3 hitPoint = muzzlePosition + muzzleForward * _range;
+        //Vector3 muzzlePosition = isLeftGunBarrel ? _muzzleLeftTransform.position : _muzzleRightTransform.position; //_muzzleTransform.position;
+        //Vector3 muzzleForward = isLeftGunBarrel ? _muzzleLeftTransform.forward : _muzzleRightTransform.forward;
+
+        Transform muzzle = isLeftGunBarrel ? _muzzleLeftTransform : _muzzleRightTransform;
+
+        //Quaternion muzzleRotation = isLeftGunBarrel ? _muzzleLeftTransform.rotation : _muzzleRightTransform.rotation;
+        Ray ray = new Ray(muzzle.position, muzzle.forward);
+        Vector3 hitPoint = muzzle.position + muzzle.forward * _range;
+
+        if (_muzzleFlashPrefab != null)
+        {
+            GameObject muzzleFlashInstance = Instantiate(_muzzleFlashPrefab, muzzle.position, muzzle.rotation, muzzle.transform);
+
+            if (_unparentMuzzleFlash)
+            {
+                muzzleFlashInstance.transform.SetParent(null);
+            }
+
+            Destroy(muzzleFlashInstance, 2f);
+        }
 
         if (Physics.SphereCast(ray, _shotRadius, out RaycastHit hitInfo, _range, _layerMask))
         {
-            Vector3 directVector = hitInfo.point - muzzlePosition; //_muzzleTransform.position;
+            Vector3 directVector = hitInfo.point - muzzle.position; //_muzzleTransform.position;
             Vector3 rayVector = Vector3.Project(directVector, ray.direction);
-            hitPoint = muzzlePosition + rayVector;
+            hitPoint = muzzle.position + rayVector;
+
+            if (_impactVfx)
+            {
+                GameObject impactVfxInstance = Instantiate(_impactVfx, hitInfo.point + (hitInfo.normal * _impactVfsSpawnOffset), Quaternion.LookRotation(hitInfo.normal));
+                if (_impactVfxLifetime > 0)
+                {
+                    Destroy(impactVfxInstance.gameObject, _impactVfxLifetime);
+                }
+            }
 
             OnHit?.Invoke(hitInfo.collider);
         }
 
-        HitscanShotAspect shot = Instantiate(_shotPrefab, hitPoint, muzzleRotation /*_muzzleTransform.rotation*/);
-        shot.distance = (hitPoint - muzzlePosition /*_muzzleTransform.position*/).magnitude;
+        HitscanShotAspect shot = Instantiate(_shotPrefab, hitPoint, muzzle.rotation /*_muzzleTransform.rotation*/);
+        shot.distance = (hitPoint - muzzle.position /*_muzzleTransform.position*/).magnitude;
         shot.outerPropertyBlock = new MaterialPropertyBlock();
 
         //isLeftGunBarrel = isLeftGunBarrel ? false : true;
