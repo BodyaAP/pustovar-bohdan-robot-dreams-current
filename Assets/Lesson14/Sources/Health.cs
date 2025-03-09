@@ -56,7 +56,7 @@ public class Health : MonoBehaviour
 
     protected virtual void Awake()
     {
-        SetHealth(HealthValue);
+        SetHealth(_maxHealth);
     }
 
     public void TakeDamage(int damage)
