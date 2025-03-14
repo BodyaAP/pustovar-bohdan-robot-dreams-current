@@ -42,4 +42,15 @@ public class HealthSystem : MonoBehaviour
         EditorUtility.SetDirty(this);
 #endif
     }
+
+    public void AddCharacter(Health character)
+    {
+        _charactersHealth.Add(character.CharacterController, character);
+        character.OnDeath += () => CharacterDeathHandler(character);
+    }
+
+    public void RemoveCharacter(Health character)
+    {
+        _charactersHealth.Remove(character.CharacterController);
+    }
 }

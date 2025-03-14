@@ -17,8 +17,8 @@ public class HorizontalBillboard : BillboardBase
 
     private void LateUpdate()
     {
-        Vector3 direction = _camera.transform.position - _transform.position;
-        direction = Vector3.ProjectOnPlane(direction, Vector3.up).normalized;
+        Vector3 direction = (_camera.transform.position - _transform.position).normalized;
+        //direction = Vector3.ProjectOnPlane(direction, Vector3.up).normalized;
         _transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
     }
 }

@@ -2039,6 +2039,10 @@ MonoBehaviour:
   _lookName: LookAround
   _fireName: Fire
   _sphereCastName: SphereCast
+  _scoreName: Score
+  _escapeName: Escape
+  _enabledCursorMode: 1
+  _disabledCursorMode: 2
 --- !u!4 &1893618482
 Transform:
   m_ObjectHideFlags: 0

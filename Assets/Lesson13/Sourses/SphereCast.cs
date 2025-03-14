@@ -8,8 +8,7 @@ public class SphereCast : MonoBehaviour
 {
     public event Action<Collider> OnHit;
     public event Action OnShot;
-
-
+    
     [SerializeField] private HitscanShotAspect _shotPrefab;
     [SerializeField] private Transform _muzzleLeftTransform;
     [SerializeField] private Transform _muzzleRightTransform;
