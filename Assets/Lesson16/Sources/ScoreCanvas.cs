@@ -1,50 +1,55 @@
 using System.Collections;
 using System.Collections.Generic;
+using MyLesson12;
+using MyLesson14;
 using TMPro;
 using UnityEngine;
 
-public class ScoreCanvas : MonoBehaviour
+namespace MyLesson16
 {
-    [SerializeField] private ScoreSystem _scoreSystem;
-    [SerializeField] private CanvasGroup _canvasGroup;
-    [SerializeField] private TextMeshProUGUI _kills;
-    [SerializeField] private TextMeshProUGUI _death;
-    [SerializeField] private TextMeshProUGUI _assists;
-    [SerializeField] private TextMeshProUGUI _accuracy;
-
-    private bool _updateRequested;
-
-    // Start is called before the first frame update
-    void Start()
+    public class ScoreCanvas : MonoBehaviour
     {
-        _scoreSystem.OnDataUpdated += DataUpdateHandler;
-        InputController.OnScoreInput += ScoreInputHandler;
-        _updateRequested = true;
-    }
+        [SerializeField] private ScoreSystem _scoreSystem;
+        [SerializeField] private CanvasGroup _canvasGroup;
+        [SerializeField] private TextMeshProUGUI _kills;
+        [SerializeField] private TextMeshProUGUI _death;
+        [SerializeField] private TextMeshProUGUI _assists;
+        [SerializeField] private TextMeshProUGUI _accuracy;
 
-    // Update is called once per frame
-    void LateUpdate()
-    {
-        if (!_updateRequested)
+        private bool _updateRequested;
+
+        // Start is called before the first frame update
+        void Start()
         {
-            return;
+            _scoreSystem.OnDataUpdated += DataUpdateHandler;
+            InputController.OnScoreInput += ScoreInputHandler;
+            _updateRequested = true;
         }
 
-        _updateRequested = false;
+        // Update is called once per frame
+        void LateUpdate()
+        {
+            if (!_updateRequested)
+            {
+                return;
+            }
 
-        _kills.text = _scoreSystem.KDA.x.ToString();
-        _death.text = _scoreSystem.KDA.y.ToString();
-        _assists.text = _scoreSystem.KDA.z.ToString();
-        _accuracy.text = _scoreSystem.Accuracy.ToString();
-    }
+            _updateRequested = false;
 
-    private void DataUpdateHandler()
-    {
-        _updateRequested = true;
-    }
+            _kills.text = _scoreSystem.KDA.x.ToString();
+            _death.text = _scoreSystem.KDA.y.ToString();
+            _assists.text = _scoreSystem.KDA.z.ToString();
+            _accuracy.text = _scoreSystem.Accuracy.ToString();
+        }
 
-    private void ScoreInputHandler(bool show)
-    {
-        _canvasGroup.alpha = show ? 1f : 0f;
+        private void DataUpdateHandler()
+        {
+            _updateRequested = true;
+        }
+
+        private void ScoreInputHandler(bool show)
+        {
+            _canvasGroup.alpha = show ? 1f : 0f;
+        }
     }
 }

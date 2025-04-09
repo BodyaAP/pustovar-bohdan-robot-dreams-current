@@ -4,67 +4,72 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Destructor : MonoBehaviour
+namespace MyLesson12
 {
-    public Action<Vector3> OnFire;
-
-    [SerializeField] private DestructableSystem _destructableSystem;
-    [SerializeField] private Transform _cameraTransform;
-    [SerializeField] private float _rayDistance;
-    [SerializeField] private LayerMask _rayMask;
-    [SerializeField] private LayerMask _explsionMask;
-
-    [SerializeField] private ExplosionController _explosionController;
-    [SerializeField] private float _explosionRadius;
-    [SerializeField] private float _explosionForce;
-    [SerializeField] private float _verticalOffset;
-
-    private float _radiusReciprocal;
-
-    // Start is called before the first frame update
-    void Start()
+    public class Destructor : MonoBehaviour
     {
-        InputController.OnFireInput += FireHandler;
-    }
+        public Action<Vector3> OnFire;
 
-    private void OnEnable()
-    {
-        _radiusReciprocal = 1f;
-        _explosionController.ApplyRadius(_explosionRadius);
-    }
+        [SerializeField] private DestructableSystem _destructableSystem;
+        [SerializeField] private Transform _cameraTransform;
+        [SerializeField] private float _rayDistance;
+        [SerializeField] private LayerMask _rayMask;
+        [SerializeField] private LayerMask _explsionMask;
 
-    private void FireHandler(bool performed)
-    {
-        Ray ray = new Ray(_cameraTransform.position, _cameraTransform.forward);
-        Vector3 _hitPoint = _cameraTransform.position + _cameraTransform.forward * _rayDistance;
+        [SerializeField] private ExplosionController _explosionController;
+        [SerializeField] private float _explosionRadius;
+        [SerializeField] private float _explosionForce;
+        [SerializeField] private float _verticalOffset;
 
-        if (Physics.Raycast(ray, out RaycastHit hitInfo, _rayDistance, _rayMask))
+        private float _radiusReciprocal;
+
+        // Start is called before the first frame update
+        void Start()
         {
-            _hitPoint = hitInfo.point;
+            InputController.OnFireInput += FireHandler;
+        }
 
-            Collider[] colliders = Physics.OverlapSphere(_hitPoint, _explosionRadius, _rayMask);
+        private void OnEnable()
+        {
+            _radiusReciprocal = 1f;
+            _explosionController.ApplyRadius(_explosionRadius);
+        }
 
-            HashSet<Rigidbody> _targets = new HashSet<Rigidbody>();
+        private void FireHandler(bool performed)
+        {
+            Ray ray = new Ray(_cameraTransform.position, _cameraTransform.forward);
+            Vector3 _hitPoint = _cameraTransform.position + _cameraTransform.forward * _rayDistance;
 
-            for (int i = 0; i < colliders.Length; i++)
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, _rayDistance, _rayMask))
             {
-                Rigidbody rigidbody = colliders[i].attachedRigidbody;
-                _targets.Add(rigidbody);
-            }
+                _hitPoint = hitInfo.point;
 
-            foreach (Rigidbody rigidbody in _targets)
-            {
-                if(rigidbody == null)
+                Collider[] colliders = Physics.OverlapSphere(_hitPoint, _explosionRadius, _rayMask);
+
+                HashSet<Rigidbody> _targets = new HashSet<Rigidbody>();
+
+                for (int i = 0; i < colliders.Length; i++)
                 {
-                    continue;
+                    Rigidbody rigidbody = colliders[i].attachedRigidbody;
+                    _targets.Add(rigidbody);
                 }
 
-                Vector3 direction = rigidbody.position - (_hitPoint + Vector3.up * _verticalOffset);
+                foreach (Rigidbody rigidbody in _targets)
+                {
+                    if (rigidbody == null)
+                    {
+                        continue;
+                    }
 
-                rigidbody.AddForce(direction.normalized * _explosionForce * Mathf.Clamp01(1f - direction.magnitude * _radiusReciprocal), ForceMode.Impulse);
+                    Vector3 direction = rigidbody.position - (_hitPoint + Vector3.up * _verticalOffset);
+
+                    rigidbody.AddForce(
+                        direction.normalized * _explosionForce *
+                        Mathf.Clamp01(1f - direction.magnitude * _radiusReciprocal), ForceMode.Impulse);
+                }
+
+                Instantiate(_explosionController, _hitPoint, Quaternion.identity).Play();
             }
-
-            Instantiate(_explosionController, _hitPoint, Quaternion.identity).Play();
         }
     }
 }

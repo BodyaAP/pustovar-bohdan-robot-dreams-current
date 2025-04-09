@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace Lesson10
+namespace MyLesson10 // namespace вже був, додав My
 {
     public class BlasterCombiner : MonoBehaviour
     {

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4194395954147885074}
   - component: {fileID: 1951035538693813045}
   - component: {fileID: 6179639096915178814}
-  - component: {fileID: 6451359219741663421}
+  - component: {fileID: 3682611074924466435}
   m_Layer: 0
   m_Name: Explosion
   m_TagString: Untagged
@@ -289,7 +289,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3
+      scalar: 8
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -753,7 +753,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 2
+      value: 0.1
       mode: 0
       spread: 0
       speed:
@@ -4890,7 +4890,7 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &6451359219741663421
+--- !u!114 &3682611074924466435
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4899,10 +4899,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5367713715340883438}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ca37236dcd119a4190aa2d2069aff1b, type: 3}
+  m_Script: {fileID: 11500000, guid: a057d343074bc6c49b488035c8f685bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sphare: {fileID: 1951035538693813045}
+  _sphere: {fileID: 1951035538693813045}
   _sparks: {fileID: 8376674964554540440}
 --- !u!1 &8930341938922335934
 GameObject:
@@ -5655,7 +5655,7 @@ ParticleSystem:
     sphericalDirectionAmount: 1
     randomPositionAmount: 0
     radius:
-      value: 2
+      value: 5.3333335
       mode: 0
       spread: 0
       speed:

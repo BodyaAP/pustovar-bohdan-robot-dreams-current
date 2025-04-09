@@ -5,30 +5,33 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MainMenu : MonoBehaviour
+namespace MyLesson16
 {
-    [SerializeField] private Button _newGameButton;
-    [SerializeField] private Button _exitButton;
-    [SerializeField] private string _sceneName;
-
-    // Start is called before the first frame update
-    void Awake()
+    public class MainMenu : MonoBehaviour
     {
-        _newGameButton.onClick.AddListener(NewGameButtonHandler);
-        _exitButton.onClick.AddListener(ExitButtonHandler);
-    }
+        [SerializeField] private Button _newGameButton;
+        [SerializeField] private Button _exitButton;
+        [SerializeField] private string _sceneName;
 
-    private void NewGameButtonHandler()
-    {
-        SceneManager.LoadSceneAsync(_sceneName, LoadSceneMode.Single);
-    }
+        // Start is called before the first frame update
+        void Awake()
+        {
+            _newGameButton.onClick.AddListener(NewGameButtonHandler);
+            _exitButton.onClick.AddListener(ExitButtonHandler);
+        }
 
-    private void ExitButtonHandler()
-    {
+        private void NewGameButtonHandler()
+        {
+            SceneManager.LoadSceneAsync(_sceneName, LoadSceneMode.Single);
+        }
+
+        private void ExitButtonHandler()
+        {
 #if UNITY_EDITOR
-        EditorApplication.isPlaying = false;
+            EditorApplication.isPlaying = false;
 #else
         Application.Quit();
 #endif
+        }
     }
 }

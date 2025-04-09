@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Lesson7
+namespace MyLesson7 // namespace вже був, додав My
 {
     public class CameraLocker : MonoBehaviour
     {

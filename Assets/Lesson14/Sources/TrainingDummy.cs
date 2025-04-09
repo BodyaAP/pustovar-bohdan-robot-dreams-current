@@ -2,29 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrainingDummy : MonoBehaviour
+namespace MyLesson14
 {
-    [SerializeField] private Health _health;
-    [SerializeField] private float _regenerationDelayTime;
-
-    private YieldInstruction _regenerationDelay;
-
-    private void Start()
+    public class TrainingDummy : MonoBehaviour
     {
-        _regenerationDelay = new WaitForSeconds(_regenerationDelayTime);
+        [SerializeField] private Health _health;
+        [SerializeField] private float _regenerationDelayTime;
 
-        _health.OnDeath += DeathHandler;
-    }
+        private YieldInstruction _regenerationDelay;
 
-    private void DeathHandler()
-    {
-        StartCoroutine(RegenerationRoutine());
-    }
+        private void Start()
+        {
+            _regenerationDelay = new WaitForSeconds(_regenerationDelayTime);
 
-    private IEnumerator RegenerationRoutine()
-    {
-        yield return _regenerationDelay;
-        _health.SetHealth(_health.MaxHealthValue);
+            _health.OnDeath += DeathHandler;
+        }
+
+        private void DeathHandler()
+        {
+            StartCoroutine(RegenerationRoutine());
+        }
+
+        private IEnumerator RegenerationRoutine()
+        {
+            yield return _regenerationDelay;
+            _health.SetHealth(_health.MaxHealthValue);
+        }
     }
 }
-

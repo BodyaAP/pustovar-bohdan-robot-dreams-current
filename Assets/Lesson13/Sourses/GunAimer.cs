@@ -2,27 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GunAimer : MonoBehaviour
+namespace MyLesson13
 {
-    [SerializeField] private Transform _gunTransform;
-    [SerializeField] private Transform _cameraTransform;
-    [SerializeField] private float _rayDistance;
-    [SerializeField] private LayerMask _rayMask;
-
-    private Vector3 _hitPoint;
-
-    public Vector3 AimPoint => _hitPoint;
-
-    private void FixedUpdate()
+    public class GunAimer : MonoBehaviour
     {
-        Ray ray = new Ray(_cameraTransform.position, _cameraTransform.forward);
-        _hitPoint = _cameraTransform.position + _cameraTransform.forward * _rayDistance;
+        [SerializeField] private Transform _gunTransform;
+        [SerializeField] private Transform _cameraTransform;
+        [SerializeField] private float _rayDistance;
+        [SerializeField] private LayerMask _rayMask;
 
-        if (Physics.Raycast(ray, out RaycastHit hitInfo, _rayDistance, _rayMask))
+        private Vector3 _hitPoint;
+
+        public Vector3 AimPoint => _hitPoint;
+
+        private void FixedUpdate()
         {
-            _hitPoint = hitInfo.point;
-        }
+            Ray ray = new Ray(_cameraTransform.position, _cameraTransform.forward);
+            _hitPoint = _cameraTransform.position + _cameraTransform.forward * _rayDistance;
 
-        _gunTransform.LookAt(_hitPoint);
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, _rayDistance, _rayMask))
+            {
+                _hitPoint = hitInfo.point;
+            }
+
+            _gunTransform.LookAt(_hitPoint);
+        }
     }
 }

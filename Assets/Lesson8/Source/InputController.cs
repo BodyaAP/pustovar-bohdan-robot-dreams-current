@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Lesson7
+namespace MyLesson7 // namespace вже був, додав My
 {
     public class InputController : MonoBehaviour
     {

@@ -3,26 +3,29 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class BillBoardSystem : MonoBehaviour
+namespace MyLesson14
 {
-    [SerializeField] protected CameraSystem _cameraSystem;
-
-    [SerializeField] protected BillboardBase[] _horizontalBillboards;
-
-    protected virtual void Awake()
+    public class BillBoardSystem : MonoBehaviour
     {
-        for (int i = 0; i < _horizontalBillboards.Length; i++)
+        [SerializeField] protected CameraSystem _cameraSystem;
+
+        [SerializeField] protected BillboardBase[] _horizontalBillboards;
+
+        protected virtual void Awake()
         {
-            _horizontalBillboards[i].SetCamera(_cameraSystem.Camera);
+            for (int i = 0; i < _horizontalBillboards.Length; i++)
+            {
+                _horizontalBillboards[i].SetCamera(_cameraSystem.Camera);
+            }
         }
-    }
 
-    [ContextMenu("Find Billboards")]
-    private void FindBillboards()
-    {
-        _horizontalBillboards = FindObjectsOfType<BillboardBase>(true);
+        [ContextMenu("Find Billboards")]
+        private void FindBillboards()
+        {
+            _horizontalBillboards = FindObjectsOfType<BillboardBase>(true);
 #if UNITY_EDITOR
-        EditorUtility.SetDirty(this);
+            EditorUtility.SetDirty(this);
 #endif
+        }
     }
 }

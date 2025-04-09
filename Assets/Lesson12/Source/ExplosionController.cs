@@ -2,25 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExplosionController : MonoBehaviour
+namespace MyLesson12
 {
-    [SerializeField] private ParticleSystem _sphare;
-    [SerializeField] private ParticleSystem _sparks;
-
-    private ParticleSystem.MainModule _sphereMain;
-    ParticleSystem.ShapeModule _sparksShape;
-
-    public void ApplyRadius(float radius)
+    public class ExplosionController : MonoBehaviour
     {
-        _sphereMain = _sphare.main;
-        _sparksShape = _sphare.shape;
+        [SerializeField] private ParticleSystem _sphare;
+        [SerializeField] private ParticleSystem _sparks;
 
-        _sphereMain.startSize = radius * 2f;
-        _sparksShape.radius = radius * 4f / 3f;
-    }
+        private ParticleSystem.MainModule _sphereMain;
+        ParticleSystem.ShapeModule _sparksShape;
 
-    public void Play()
-    {
-        _sphare.Play(true);
+        public void ApplyRadius(float radius)
+        {
+            _sphereMain = _sphare.main;
+            _sparksShape = _sphare.shape;
+
+            _sphereMain.startSize = radius * 2f;
+            _sparksShape.radius = radius * 4f / 3f;
+        }
+
+        public void Play()
+        {
+            _sphare.Play(true);
+        }
     }
 }

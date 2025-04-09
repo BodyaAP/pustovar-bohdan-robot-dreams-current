@@ -3,90 +3,93 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Health : MonoBehaviour
+namespace MyLesson14
 {
-    public event Action<int> OnHealthChanged;
-    public event Action<float> OnHealthChanged01;
-    public event Action OnDeath;
-
-    [SerializeField] protected CharacterController _characterController;
-    [SerializeField] protected int _maxHealth;
-
-    protected int _health;
-    protected bool _isAlive;
-
-    public int HealthValue
+    public class Health : MonoBehaviour
     {
-        get { return _health; }
-        set
+        public event Action<int> OnHealthChanged;
+        public event Action<float> OnHealthChanged01;
+        public event Action OnDeath;
+
+        [SerializeField] protected CharacterController _characterController;
+        [SerializeField] protected int _maxHealth;
+
+        protected int _health;
+        protected bool _isAlive;
+
+        public int HealthValue
         {
-            if (_health == value)
+            get { return _health; }
+            set
+            {
+                if (_health == value)
+                {
+                    return;
+                }
+
+                _health = value;
+                OnHealthChanged?.Invoke(_health);
+                OnHealthChanged01?.Invoke(_health / (float)_maxHealth);
+            }
+        }
+
+        public bool IsAlive
+        {
+            get { return _isAlive; }
+            set
+            {
+                if (_isAlive == value)
+                {
+                    return;
+                }
+
+                _isAlive = value;
+
+                if (!_isAlive)
+                {
+                    OnDeath?.Invoke();
+                }
+            }
+        }
+
+        public float HealthValue01 => HealthValue / (float)_maxHealth;
+        public int MaxHealthValue => _maxHealth;
+        public CharacterController CharacterController => _characterController;
+
+        protected virtual void Awake()
+        {
+            SetHealth(_maxHealth);
+        }
+
+        public void TakeDamage(int damage)
+        {
+            if (!IsAlive)
             {
                 return;
             }
 
-            _health = value;
-            OnHealthChanged?.Invoke(_health);
-            OnHealthChanged01?.Invoke(_health / (float)_maxHealth);
-        }
-    }
+            HealthValue = Mathf.Clamp(HealthValue - damage, 0, _maxHealth);
 
-    public bool IsAlive
-    {
-        get { return _isAlive; }
-        set
+            if (HealthValue <= 0)
+            {
+                IsAlive = false;
+            }
+        }
+
+        public void Heal(int heal)
         {
-            if (_isAlive == value)
+            if (!IsAlive)
             {
                 return;
             }
 
-            _isAlive = value;
-
-            if(!_isAlive)
-            {
-                OnDeath?.Invoke();
-            }
+            HealthValue = Mathf.Clamp(HealthValue + heal, 0, _maxHealth);
         }
-    }
 
-    public float HealthValue01 => HealthValue / (float)_maxHealth;
-    public int MaxHealthValue => _maxHealth;
-    public CharacterController CharacterController => _characterController;
-
-    protected virtual void Awake()
-    {
-        SetHealth(_maxHealth);
-    }
-
-    public void TakeDamage(int damage)
-    {
-        if (!IsAlive) 
+        public void SetHealth(int health)
         {
-            return;
+            HealthValue = Mathf.Clamp(health, 0, _maxHealth);
+            IsAlive = HealthValue > 0;
         }
-
-        HealthValue = Mathf.Clamp(HealthValue - damage, 0, _maxHealth);
-
-        if(HealthValue <= 0)
-        {
-            IsAlive = false;
-        }
-    }
-
-    public void Heal(int heal)
-    {
-        if (!IsAlive)
-        {
-            return;
-        }
-
-        HealthValue = Mathf.Clamp(HealthValue + heal, 0, _maxHealth);
-    }
-
-    public void SetHealth(int health)
-    {
-        HealthValue = Mathf.Clamp(health, 0, _maxHealth);
-        IsAlive = HealthValue > 0;
     }
 }

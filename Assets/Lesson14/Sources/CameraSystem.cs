@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraSystem : MonoBehaviour
+namespace MyLesson14
 {
-    [SerializeField] private Camera _camera;
+    public class CameraSystem : MonoBehaviour
+    {
+        [SerializeField] private Camera _camera;
 
-    public Camera Camera => _camera;
+        public Camera Camera => _camera;
+    }
 }
