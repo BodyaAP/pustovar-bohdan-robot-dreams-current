@@ -106,7 +106,7 @@ namespace BehaviourTreeSystem.BehaviourStates
             Vector3 weaponDirection =
                 (GetAimingTarget(playerPosition, _inaccuracy) - _weaponTransform.position).normalized;
             _weaponTransform.rotation = Quaternion.LookRotation(weaponDirection);
-            
+
             _charge -= enemyController.WeaponData.ChargePerShot;
             _time = 0f;
 

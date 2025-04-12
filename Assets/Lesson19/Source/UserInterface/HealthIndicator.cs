@@ -27,6 +27,7 @@ namespace MyLesson19
 
             private void Update()
             {
+                //Debug.Log("Indicator");
                 if (_targetHealth < _displayedHealth)
                     _displayedHealth = _targetHealth;
                 else

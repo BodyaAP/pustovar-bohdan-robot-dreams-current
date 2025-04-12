@@ -1,8 +1,10 @@
 using System;
+using System.Numerics;
 using MyLesson19.PhysX;
 using PhysX;
 using MyLesson19.StateMachineSystem.ServiceLocatorSystem;
 using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
 
 namespace MyLesson19
 {
@@ -31,6 +33,8 @@ namespace MyLesson19
             private bool _seesTarget;
             private Vector3 _lastTargetPosition;
 
+            private float _distanceTarget = 1000f;
+
             private State _currentState;
 
             public State CurrentState
@@ -49,6 +53,8 @@ namespace MyLesson19
             public bool HasTarget => _hasTarget;
             public bool SeesTarget => _seesTarget;
             public Vector3 LastTargetPosition => _lastTargetPosition;
+
+            public float DistanceTarget => _distanceTarget;
 
             private void Start()
             {
@@ -73,6 +79,14 @@ namespace MyLesson19
                         SearchingUpdate();
                         break;
                 }
+
+                //Debug.Log(CurrentState);
+                //Debug.Log(CurrentTarget);
+                //Debug.Log(HasTarget);
+                //Debug.Log(SeesTarget);
+
+                //Debug.Log(_playerService.Player.Targetable != null ? true : false);
+                //Debug.Log(DistanceTarget);
             }
 
             private void ScanningUpdate()
@@ -84,6 +98,8 @@ namespace MyLesson19
                 _hasTarget = true;
                 _seesTarget = true;
                 CurrentState = State.Chasing;
+
+                _distanceTarget = GetDistanceTarget(_currentTarget);
             }
 
             private void ChasingUpdate()
@@ -91,7 +107,10 @@ namespace MyLesson19
                 _lastTargetPosition = _currentTarget.TargetPivot.position;
 
                 if (CheckTarget(_currentTarget))
+                {
+                    _distanceTarget = GetDistanceTarget(_currentTarget);
                     return;
+                }
 
                 _seesTarget = false;
                 CurrentState = State.Searching;
@@ -103,6 +122,7 @@ namespace MyLesson19
                     return;
 
                 _seesTarget = true;
+                _distanceTarget = GetDistanceTarget(_currentTarget);
                 CurrentState = State.Chasing;
             }
 
@@ -162,6 +182,14 @@ namespace MyLesson19
                 if (hit.collider != _playerService.Player.CharacterController)
                     return false;
                 return true;
+            }
+
+            private float GetDistanceTarget(TargetableBase targetable)
+            {
+                Vector3 position = _transform.position;
+                Vector3 playerPosition = targetable.TargetPivot.position;
+
+                return targetable != null ? Vector3.Distance(position, playerPosition) : 1000;
             }
 
             private void HealthChangedHandler(int health)

@@ -13,6 +13,7 @@ namespace MyLesson19
             [SerializeField] private int _chargePerShot;
             [SerializeField] private float _reloadTime;
             [SerializeField] private int _clipCount;
+            [SerializeField] private int _meleeDamage;
 
             public int Damage => _damage;
             public float CooldownTime => _cooldownTime;
@@ -20,6 +21,7 @@ namespace MyLesson19
             public int ChargePerShot => _chargePerShot;
             public float ReloadTime => _reloadTime;
             public int ClipCount => _clipCount;
+            public int MeleeDamage => _meleeDamage;
         }
     }
 }

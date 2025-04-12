@@ -21,6 +21,7 @@ namespace MyLesson19
             [SerializeField] private float _preferredRange;
             [SerializeField] private float _innacuracyFactor;
             [SerializeField] private float _shotDelay;
+            [SerializeField] private float _meleeDelay;
 
             public Vector2 IdleDuration => _idleDuration;
             public float MaxPatrolStamina => _maxPatrolStamina;
@@ -36,6 +37,7 @@ namespace MyLesson19
             public float PreferredRange => _preferredRange;
             public float InaccuracyFactor => _innacuracyFactor;
             public float ShotDelay => _shotDelay;
+            public float MeleeDelay => _meleeDelay;
         }
     }
 }

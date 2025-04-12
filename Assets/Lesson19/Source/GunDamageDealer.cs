@@ -26,6 +26,7 @@ namespace MyLesson19
                 _healthService = ServiceLocator.Instance.GetService<IHealthService>();
 
                 _gun.OnHit += GunHitHandler;
+                _gun.OnMelee += GunMeleeHandler;
             }
 
             private void GunHitHandler(Collider collider)
@@ -33,6 +34,14 @@ namespace MyLesson19
                 if (_healthService.GetHealth(collider, out Health health))
                     health.TakeDamage(_data.Damage);
                 OnHit?.Invoke(health ? 1 : 0);
+            }
+
+            private void GunMeleeHandler(Collider collider)
+            {
+                if (_healthService.GetHealth(collider, out Health health))
+                {
+                    health.TakeDamage(_data.MeleeDamage);
+                }
             }
         }
     }

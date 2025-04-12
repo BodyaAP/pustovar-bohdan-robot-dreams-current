@@ -1,8 +1,11 @@
 using System;
 using System.Collections;
+using System.Numerics;
 using Shooting;
 //using StateMachineSystem.ServiceLocatorSystem;
 using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
+using Vector4 = UnityEngine.Vector4;
 
 namespace MyLesson19
 {
@@ -13,6 +16,8 @@ namespace MyLesson19
             public event Action<Collider> OnHit;
             public event Action OnShot;
 
+            public event Action<Collider> OnMelee;
+
             [SerializeField] protected HitscanShotAspect _shotPrefab;
             [SerializeField] protected Transform _muzzleTransform;
             [SerializeField] protected float _decaySpeed;
@@ -22,6 +27,8 @@ namespace MyLesson19
             [SerializeField] protected string _tilingName;
             [SerializeField] protected float _range;
             [SerializeField] protected LayerMask _layerMask;
+
+            [SerializeField] protected float _meleeDistance;
 
             protected int _tilingId;
 
@@ -74,6 +81,37 @@ namespace MyLesson19
                 tiling.y = shot.distance * 0.5f / _shotVisualDiameter;
                 shot.outerPropertyBlock.SetVector(_tilingId, tiling);
                 shot.Outer.SetPropertyBlock(shot.outerPropertyBlock);
+            }
+
+            /// <summary>
+            /// Цей код потрібно винести в окремий файл, щоб його можна було використовувати для зброї ближнього бою
+            /// </summary>
+            public void Melee()
+            {
+                Debug.Log("Melee");
+                Vector3 targetDirection = Vector3.zero;
+                Ray ray = new Ray(_muzzleTransform.position, _muzzleTransform.forward);
+                if (Physics.SphereCast(ray, 0.5f, out RaycastHit hitInfo, _meleeDistance))
+                {
+                    targetDirection = (hitInfo.point  - _muzzleTransform.position).normalized;
+                    OnMelee?.Invoke(hitInfo.collider);
+                }
+
+                StartCoroutine(MeleeRoutine(targetDirection));
+            }
+
+            protected IEnumerator MeleeRoutine(Vector3 targetDirection)
+            {
+                Vector3 originalPosition = transform.position;
+                //Vector3 offset = new Vector3(0, 0, 1f);
+                float offset = 1f;
+                float duration = 0.5f;
+
+                transform.position = originalPosition + targetDirection * offset;
+
+                yield return new WaitForSeconds(duration);
+
+                transform.position = originalPosition;
             }
         }
     }

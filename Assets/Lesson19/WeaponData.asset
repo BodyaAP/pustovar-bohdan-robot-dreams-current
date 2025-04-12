@@ -18,3 +18,4 @@ MonoBehaviour:
   _chargePerShot: 30
   _reloadTime: 3
   _clipCount: 0
+  _meleeDamage: 10

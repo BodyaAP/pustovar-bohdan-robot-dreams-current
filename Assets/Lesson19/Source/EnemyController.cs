@@ -96,6 +96,9 @@ namespace MyLesson19
 
                 _behaviourMachine.AddState((byte)EnemyBehaviour.Death,
                     new DeathBehaviour(_behaviourMachine, (byte)EnemyBehaviour.Death, this));
+
+                _behaviourMachine.AddState((byte)EnemyBehaviour.Melee,
+                    new MeleeBehaviour(_behaviourMachine, (byte)EnemyBehaviour.Melee, this));
             }
 
             protected virtual void InitBehaviourTree()
@@ -106,9 +109,13 @@ namespace MyLesson19
                 BehaviourBranch patrolBranch = new BehaviourBranch(patrolLeaf, idleLeaf, PatrolStaminaCondition);
 
                 BehaviourLeaf attackLeaf = new BehaviourLeaf((byte)EnemyBehaviour.Attack);
+                BehaviourLeaf meleeLeaf = new BehaviourLeaf((byte)EnemyBehaviour.Melee);
+
+                BehaviourBranch attackBranch = new BehaviourBranch(attackLeaf, meleeLeaf, AttackTargetCondition);
+
                 BehaviourLeaf searchLeaf = new BehaviourLeaf((byte)EnemyBehaviour.Search);
 
-                BehaviourBranch seesTarget = new BehaviourBranch(attackLeaf, searchLeaf, SeesTargetCondition);
+                BehaviourBranch seesTarget = new BehaviourBranch(attackBranch, searchLeaf, SeesTargetCondition);
 
                 BehaviourBranch hasTarget = new BehaviourBranch(seesTarget, patrolBranch, HasTargetCondition);
 
@@ -120,6 +127,7 @@ namespace MyLesson19
             private void FixedUpdate()
             {
                 _behaviourMachine.Update(Time.fixedDeltaTime);
+                Debug.Log(_currentBehaviour);
             }
 
             private void StateChangeHandler(byte stateId)
@@ -158,6 +166,11 @@ namespace MyLesson19
             protected bool SeesTargetCondition()
             {
                 return _playerdar.SeesTarget;
+            }
+
+            protected bool AttackTargetCondition()
+            {
+                return _playerdar.DistanceTarget >= 10f;
             }
 
             protected void HealthDeathHandler()

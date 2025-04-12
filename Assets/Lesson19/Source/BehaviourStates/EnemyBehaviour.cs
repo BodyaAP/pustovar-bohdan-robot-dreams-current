@@ -10,6 +10,7 @@ namespace MyLesson19
             Attack,
             Search,
             Death,
+            Melee,
         }
     }
 }
