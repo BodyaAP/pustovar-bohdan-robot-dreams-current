@@ -86,7 +86,7 @@ namespace MyLesson19
                 //Debug.Log(SeesTarget);
 
                 //Debug.Log(_playerService.Player.Targetable != null ? true : false);
-                Debug.Log(DistanceTarget);
+                //Debug.Log(DistanceTarget);
             }
 
             private void ScanningUpdate()

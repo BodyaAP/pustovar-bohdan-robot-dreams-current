@@ -49,3 +49,5 @@ MonoBehaviour:
   _preferredRange: 15
   _innacuracyFactor: 0.75
   _shotDelay: 0.0625
+  _meleeDelay: 2
+  _meleeRange: 6
