@@ -789,6 +789,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2661756142257781597, guid: dddeda6d0629a09438dbf97ce84d81fd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8306445774293738233}
+    - targetCorrespondingSourceObject: {fileID: 2661756142257781597, guid: dddeda6d0629a09438dbf97ce84d81fd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -4574216266579640623}
   m_SourcePrefab: {fileID: 100100000, guid: dddeda6d0629a09438dbf97ce84d81fd, type: 3}
 --- !u!1 &4630034059534352110 stripped
 GameObject:
@@ -974,6 +977,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _targetPivot: {fileID: 46104075682430051}
+--- !u!114 &-4574216266579640623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4630034059534352110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5465de6474c4581409bb5d37130eef56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainRadius: 20
+  radiusStep: 1
+  drawingColor: {r: 1, g: 0.059916537, b: 0, a: 1}
+  labelOffset: 0.2
+  numberFormat: F1
 --- !u!4 &4630034059534352113 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2661756142257781570, guid: dddeda6d0629a09438dbf97ce84d81fd, type: 3}

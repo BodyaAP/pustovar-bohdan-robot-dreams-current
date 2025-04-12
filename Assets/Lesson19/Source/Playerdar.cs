@@ -86,7 +86,7 @@ namespace MyLesson19
                 //Debug.Log(SeesTarget);
 
                 //Debug.Log(_playerService.Player.Targetable != null ? true : false);
-                //Debug.Log(DistanceTarget);
+                Debug.Log(DistanceTarget);
             }
 
             private void ScanningUpdate()
@@ -97,9 +97,8 @@ namespace MyLesson19
                 _currentTarget = _playerService.Player.Targetable;
                 _hasTarget = true;
                 _seesTarget = true;
-                CurrentState = State.Chasing;
-
                 _distanceTarget = GetDistanceTarget(_currentTarget);
+                CurrentState = State.Chasing;
             }
 
             private void ChasingUpdate()
@@ -133,6 +132,7 @@ namespace MyLesson19
                     if (CheckTarget(_currentTarget, false))
                     {
                         _seesTarget = true;
+                        _distanceTarget = GetDistanceTarget(_currentTarget);
                         CurrentState = State.Chasing;
                     }
                     else
@@ -147,6 +147,7 @@ namespace MyLesson19
                     {
                         _hasTarget = true;
                         _seesTarget = true;
+                        _distanceTarget = GetDistanceTarget(_currentTarget);
                         _currentTarget = _playerService.Player.Targetable;
                         CurrentState = State.Chasing;
                     }

@@ -170,7 +170,7 @@ namespace MyLesson19
 
             protected bool AttackTargetCondition()
             {
-                return _playerdar.DistanceTarget >= 10f;
+                return _playerdar.DistanceTarget >= Data.MeleeRange;
             }
 
             protected void HealthDeathHandler()
