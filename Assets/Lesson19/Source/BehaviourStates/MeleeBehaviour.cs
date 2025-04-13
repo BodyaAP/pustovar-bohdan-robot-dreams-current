@@ -58,17 +58,34 @@ namespace MyLesson19
 
         private void MeleeUpdate(float deltaTime)
         {
-            Debug.Log("Melee update");
+            //Debug.Log("Melee update");
+            //Vector3 distance = Vector3.ProjectOnPlane(enemyController.Playerdar.CurrentTarget.TargetPivot.position,
+            //   Vector3.up);
+            Vector3 playerPosition = enemyController.Playerdar.CurrentTarget.TargetPivot.position;
+            Vector3 playerDirection = (playerPosition - enemyController.CharacterTransform.position).normalized;
+            float distance = Vector3.Distance(playerPosition, enemyController.CharacterTransform.position);
             _time += deltaTime;
 
-            if (_time < enemyController.Data.MeleeDelay)
+            //if (distance.sqrMagnitude <= enemyController.Data.MeleeAttackRange)
+            if (distance <= enemyController.Data.MeleeAttackRange)
             {
-                return;
+                if (_time < enemyController.Data.MeleeDelay)
+                {
+                    enemyController.ComputeBehaviour();
+                    return;
+                }
+
+                enemyController.HitScanGun.Melee();
+
+
+                _time = 0;
             }
-
-            enemyController.HitScanGun.Melee();
-
-            _time = 0;
+            else
+            {
+                enemyController.CharacterController.Move(playerDirection * (deltaTime * enemyController.Data.MeleeApproachSpeed) + Physics.gravity);
+                enemyController.ComputeBehaviour();
+            }
+            //_time = 0;
             //Ray ray = new Ray(_characterTransform.position, _characterTransform.forward);
             //if (Physics.SphereCast(ray, 0.5f, out RaycastHit hitInfo, 3f))
             //{

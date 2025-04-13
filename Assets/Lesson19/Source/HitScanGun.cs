@@ -88,7 +88,6 @@ namespace MyLesson19
             /// </summary>
             public void Melee()
             {
-                Debug.Log("Melee");
                 Vector3 targetDirection = Vector3.zero;
                 Ray ray = new Ray(_muzzleTransform.position, _muzzleTransform.forward);
                 if (Physics.SphereCast(ray, 0.5f, out RaycastHit hitInfo, _meleeDistance))

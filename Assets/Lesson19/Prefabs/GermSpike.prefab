@@ -516,7 +516,7 @@ MonoBehaviour:
   _layerMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  _meleeDistance: 5
+  _meleeDistance: 2
 --- !u!114 &975045111626592835
 MonoBehaviour:
   m_ObjectHideFlags: 0

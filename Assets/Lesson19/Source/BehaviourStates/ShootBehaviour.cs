@@ -76,7 +76,11 @@ namespace BehaviourTreeSystem.BehaviourStates
         {
             _time += deltaTime;
             if (_time < enemyController.WeaponData.CooldownTime)
+            {
+                enemyController.ComputeBehaviour();
                 return;
+            }
+
             Shoot();
         }
 

@@ -127,12 +127,14 @@ namespace MyLesson19
             private void FixedUpdate()
             {
                 _behaviourMachine.Update(Time.fixedDeltaTime);
-                Debug.Log(_currentBehaviour);
+                //Debug.Log(_currentBehaviour);
             }
 
             private void StateChangeHandler(byte stateId)
             {
                 _currentBehaviour = (EnemyBehaviour)stateId;
+
+                Debug.Log($"Enemy state changed: {_currentBehaviour}");
             }
 
             public void Initialize(INavPointProvider navPointProvider, Camera camera)
@@ -145,7 +147,14 @@ namespace MyLesson19
             {
                 if (_behaviourTree == null)
                     return;
-                _behaviourMachine.SetState(_behaviourTree.GetBehaviourId());
+
+                byte behaviourTreeId = _behaviourTree.GetBehaviourId();
+                EnemyBehaviour treeBehaviour = (EnemyBehaviour)behaviourTreeId;
+
+                Debug.Log($"Compute behaviour: {treeBehaviour}");
+
+                //_behaviourMachine.SetState(_behaviourTree.GetBehaviourId());
+                _behaviourMachine.SetState(behaviourTreeId);
             }
 
             public void RestorePatrolStamina()
@@ -170,7 +179,7 @@ namespace MyLesson19
 
             protected bool AttackTargetCondition()
             {
-                return _playerdar.DistanceTarget >= Data.MeleeRange;
+                return _playerdar.DistanceTarget >= Data.MeleeBehaviourRange;
             }
 
             protected void HealthDeathHandler()
