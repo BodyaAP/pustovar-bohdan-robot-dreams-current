@@ -15,7 +15,8 @@ namespace MyLesson19
 
             [SerializeField] protected GunAimer _aimer;
             [SerializeField] protected HitscanShotAspect _shotPrefab;
-            [SerializeField] protected Transform _muzzleTransform;
+            [SerializeField] protected Transform _muzzleLeftTransform;
+            [SerializeField] protected Transform _muzzleRightTransform;
             [SerializeField] protected float _decaySpeed;
             [SerializeField] protected Vector3 _shotScale;
             [SerializeField] protected float _shotRadius;
@@ -24,7 +25,16 @@ namespace MyLesson19
             [SerializeField] protected float _range;
             [SerializeField] protected LayerMask _layerMask;
 
+            [SerializeField] protected Transform _weaponTransform;
+
+            [SerializeField] private GameObject _muzzleFlashPrefab;
+            [SerializeField] private bool _unparentMuzzleFlash;
+            [SerializeField] private GameObject _impactVfx;
+            [SerializeField] private float _impactVfxLifetime = 5f;
+            [SerializeField] private float _impactVfsSpawnOffset = 0.1f;
+
             protected int _tilingId;
+            private bool isLeftGunBarrel = true;
 
             protected InputController _inputController;
 
@@ -47,23 +57,54 @@ namespace MyLesson19
 
             protected virtual void PrimaryInputHandler()
             {
-                Vector3 muzzlePosition = _muzzleTransform.position;
-                Vector3 muzzleForward = _muzzleTransform.forward;
-                Ray ray = new Ray(muzzlePosition, muzzleForward);
-                Vector3 hitPoint = muzzlePosition + muzzleForward * _range;
+                Transform muzzle = isLeftGunBarrel ? _muzzleLeftTransform : _muzzleRightTransform;
+
+                //Vector3 muzzlePosition = _muzzleTransform.position;
+                //Vector3 muzzleForward = _muzzleTransform.forward;
+                Ray ray = new Ray(muzzle.position, muzzle.forward);
+                Vector3 hitPoint = muzzle.position + muzzle.forward * _range;
+
+                if (_muzzleFlashPrefab != null)
+                {
+                    GameObject muzzleFlashInstance =
+                        Instantiate(_muzzleFlashPrefab, muzzle.position, muzzle.rotation, muzzle.transform);
+
+                    if (_unparentMuzzleFlash)
+                    {
+                        muzzleFlashInstance.transform.SetParent(null);
+                    }
+
+                    Destroy(muzzleFlashInstance, 2f);
+                }
+
                 if (Physics.SphereCast(ray, _shotRadius, out RaycastHit hitInfo, _range, _layerMask))
                 {
-                    Vector3 directVector = hitInfo.point - _muzzleTransform.position;
+                    Vector3 directVector = hitInfo.point - muzzle.position;
                     Vector3 rayVector = Vector3.Project(directVector, ray.direction);
-                    hitPoint = muzzlePosition + rayVector;
+                    hitPoint = muzzle.position + rayVector;
+
+                    if (_impactVfx)
+                    {
+                        GameObject impactVfxInstance = Instantiate(_impactVfx,
+                            hitInfo.point + (hitInfo.normal * _impactVfsSpawnOffset),
+                            Quaternion.LookRotation(hitInfo.normal));
+                        if (_impactVfxLifetime > 0)
+                        {
+                            Destroy(impactVfxInstance.gameObject, _impactVfxLifetime);
+                        }
+                    }
 
                     OnHit?.Invoke(hitInfo.collider);
                 }
 
-                HitscanShotAspect shot = Instantiate(_shotPrefab, hitPoint, _muzzleTransform.rotation);
-                shot.distance = (hitPoint - _muzzleTransform.position).magnitude;
+                HitscanShotAspect shot = Instantiate(_shotPrefab, hitPoint, muzzle.rotation);
+                shot.distance = (hitPoint - muzzle.position).magnitude;
                 shot.outerPropertyBlock = new MaterialPropertyBlock();
+
+                isLeftGunBarrel = !isLeftGunBarrel;
+
                 StartCoroutine(ShotRoutine(shot));
+                //StartCoroutine(RecoilRoutine());
 
                 OnShot?.Invoke();
             }
@@ -90,6 +131,55 @@ namespace MyLesson19
                 shot.outerPropertyBlock.SetVector(_tilingId, tiling);
                 shot.Outer.SetPropertyBlock(shot.outerPropertyBlock);
             }
+
+            protected IEnumerator RecoilRoutine()
+            {
+                Debug.Log("Recoil");
+                float offset = 0.5f;
+                float duration = 0.15f;
+
+                Vector3 originalPosition = _weaponTransform.position;
+                Quaternion originalRotation = _weaponTransform.rotation;
+
+                Vector3 direction = _weaponTransform.forward.normalized;
+
+                _weaponTransform.position = originalPosition + direction * offset;
+                _weaponTransform.rotation = originalRotation * Quaternion.Euler(-35f, 0, 0);
+
+                yield return new WaitForSeconds(duration);
+
+                _weaponTransform.position = originalPosition;
+                _weaponTransform.rotation = originalRotation;
+            }
+
+            //protected IEnumerator RecoilRoutine()
+            //{
+            //    Debug.Log("Recoil");
+            //    float offset = 0.2f; // не надто велике значення
+            //    float duration = 0.15f;
+
+            //    Vector3 originalPosition = _weaponTransform.position;
+            //    Quaternion originalRotation = _weaponTransform.rotation;
+
+            //    Vector3 direction = _weaponTransform.forward.normalized;
+            //    Vector3 recoilPosition = originalPosition + direction * offset;
+            //    Quaternion recoilRotation = originalRotation * Quaternion.Euler(35f, 0f, 0f);
+
+            //    float elapsed = 0f;
+
+            //    while (elapsed < duration)
+            //    {
+            //        float t = elapsed / duration;
+            //        _weaponTransform.position = Vector3.Lerp(recoilPosition, originalPosition, t);
+            //        _weaponTransform.rotation = Quaternion.Slerp(recoilRotation, originalRotation, t);
+            //        elapsed += Time.deltaTime;
+            //        yield return null;
+            //    }
+
+            //    // На всяк випадок — фінальне встановлення точних значень
+            //    _weaponTransform.position = originalPosition;
+            //    _weaponTransform.rotation = originalRotation;
+            //}
         }
     }
 }

@@ -41,7 +41,7 @@ namespace MyLesson19
 
             private void SceneLoadHandler(AsyncOperation asyncOperation)
             {
-                ServiceLocator.Instance.GetService<ISceneManager>().onSceneLoad -= SceneLoadHandler;
+                ServiceLocator.Instance.GetService<ISceneManager>().onSceneLoad += SceneLoadHandler;
                 ServiceLocator.Instance.GetService<ILoadingScreenService>()?.BeginLoading(asyncOperation);
             }
         }

@@ -50,5 +50,6 @@ MonoBehaviour:
   _innacuracyFactor: 0.75
   _shotDelay: 0.0625
   _meleeDelay: 2
-  _meleeRange: 6
-  _meleeApproachSpeed: 5
+  _meleeBehaviourRange: 15
+  _meleeAttackRange: 5
+  _meleeApproachSpeed: 10

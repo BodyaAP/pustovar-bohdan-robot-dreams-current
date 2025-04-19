@@ -63,11 +63,14 @@ namespace MyLesson19
             //   Vector3.up);
             Vector3 playerPosition = enemyController.Playerdar.CurrentTarget.TargetPivot.position;
             Vector3 playerDirection = (playerPosition - enemyController.CharacterTransform.position).normalized;
-            float distance = Vector3.Distance(playerPosition, enemyController.CharacterTransform.position);
+            //float distance = Vector3.Distance(playerPosition, enemyController.CharacterTransform.position);
+
+            float distance = (playerPosition - enemyController.CharacterTransform.position).sqrMagnitude;
+
             _time += deltaTime;
 
             //if (distance.sqrMagnitude <= enemyController.Data.MeleeAttackRange)
-            if (distance <= enemyController.Data.MeleeAttackRange)
+            if (distance <= enemyController.Data.MeleeAttackRange * enemyController.Data.MeleeAttackRange)
             {
                 if (_time < enemyController.Data.MeleeDelay)
                 {

@@ -25,6 +25,12 @@ namespace MyLesson19
                 _characters.Add(character.CharacterController, character);
                 // Important, Liskov principle broken here
                 character.OnDeath += () => CharacterDeathHandler((Dummies.Health)character);
+
+                //if (!_characters.ContainsKey(character.CharacterController))
+                //{
+                //    _characters.Add(character.CharacterController, character);
+                //    character.OnDeath += () => CharacterDeathHandler((Dummies.Health)character);
+                //}
             }
 
             public void RemoveCharacter(IHealth character)

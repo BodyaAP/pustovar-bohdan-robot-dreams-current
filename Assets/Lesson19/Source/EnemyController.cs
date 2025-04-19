@@ -10,6 +10,9 @@ using MyLesson19.StateMachineSystem.ServiceLocatorSystem;
 using UnityEngine;
 using UnityEngine.AI;
 using Health = MyLesson19.MainMenu.Health;
+using MyLesson16;
+using System.Collections;
+using MyLesson19.DefendFlag;
 
 namespace MyLesson19
 {
@@ -35,7 +38,12 @@ namespace MyLesson19
             [SerializeField, ReadOnly] private float _patrolStamina;
             [SerializeField, ReadOnly] private EnemyBehaviour _currentBehaviour;
 
+            [SerializeField] private ParticleSystem _destroyedEffect;
+            [SerializeField] private bool _isStormtrooper = false;
+
             private INavPointProvider _navPointProvider;
+            //private ObjectPool _objectPool;
+            //private System.Action _onDeathAction;
 
             protected BehaviourTree _behaviourTree;
             protected StateMachine _behaviourMachine;
@@ -62,6 +70,8 @@ namespace MyLesson19
             public HitScanGun HitScanGun => _hitScanGun;
             public WeaponData WeaponData => _weaponData;
 
+            public bool IsStormtrooper => _isStormtrooper;
+
             private void Awake()
             {
                 _navMeshAgent.updatePosition = false;
@@ -74,6 +84,13 @@ namespace MyLesson19
                 InitBehaviourTree();
 
                 _health.OnDeath += HealthDeathHandler;
+
+                PoolSystem.Create();
+
+                if (_destroyedEffect != null)
+                {
+                    PoolSystem.Instance.InitPool(_destroyedEffect, 16);
+                }
             }
 
             protected virtual void InitStateMachine()
@@ -99,14 +116,22 @@ namespace MyLesson19
 
                 _behaviourMachine.AddState((byte)EnemyBehaviour.Melee,
                     new MeleeBehaviour(_behaviourMachine, (byte)EnemyBehaviour.Melee, this));
+
+                _behaviourMachine.AddState((byte)EnemyBehaviour.Storm,
+                    new StormBehavior(_behaviourMachine, (byte)EnemyBehaviour.Storm, this));
             }
 
             protected virtual void InitBehaviourTree()
             {
-                BehaviourLeaf idleLeaf = new BehaviourLeaf((byte)EnemyBehaviour.Idle);
-                BehaviourLeaf patrolLeaf = new BehaviourLeaf((byte)EnemyBehaviour.Patrol);
 
-                BehaviourBranch patrolBranch = new BehaviourBranch(patrolLeaf, idleLeaf, PatrolStaminaCondition);
+                BehaviourLeaf patrolLeaf = new BehaviourLeaf((byte)EnemyBehaviour.Patrol);
+                BehaviourLeaf stormLeaf = new BehaviourLeaf((byte)EnemyBehaviour.Storm);
+
+                BehaviourBranch defenderBranch = new BehaviourBranch(stormLeaf, patrolLeaf, DefenderCondition);
+
+                BehaviourLeaf idleLeaf = new BehaviourLeaf((byte)EnemyBehaviour.Idle);
+
+                BehaviourBranch patrolBranch = new BehaviourBranch(defenderBranch, idleLeaf, PatrolStaminaCondition);
 
                 BehaviourLeaf attackLeaf = new BehaviourLeaf((byte)EnemyBehaviour.Attack);
                 BehaviourLeaf meleeLeaf = new BehaviourLeaf((byte)EnemyBehaviour.Melee);
@@ -134,7 +159,7 @@ namespace MyLesson19
             {
                 _currentBehaviour = (EnemyBehaviour)stateId;
 
-                Debug.Log($"Enemy state changed: {_currentBehaviour}");
+                //Debug.Log($"Enemy state changed: {_currentBehaviour}");
             }
 
             public void Initialize(INavPointProvider navPointProvider, Camera camera)
@@ -151,7 +176,7 @@ namespace MyLesson19
                 byte behaviourTreeId = _behaviourTree.GetBehaviourId();
                 EnemyBehaviour treeBehaviour = (EnemyBehaviour)behaviourTreeId;
 
-                Debug.Log($"Compute behaviour: {treeBehaviour}");
+                //Debug.Log($"Compute behaviour: {treeBehaviour}");
 
                 //_behaviourMachine.SetState(_behaviourTree.GetBehaviourId());
                 _behaviourMachine.SetState(behaviourTreeId);
@@ -182,12 +207,58 @@ namespace MyLesson19
                 return _playerdar.DistanceTarget >= Data.MeleeBehaviourRange;
             }
 
+            protected bool DefenderCondition()
+            {
+                return _isStormtrooper;
+            }
+
             protected void HealthDeathHandler()
             {
                 _behaviourTree = null;
                 _behaviourMachine.ForceState((byte)EnemyBehaviour.Death);
                 ServiceLocator.Instance.GetService<IHealthService>().RemoveCharacter(_health);
+
+
+
+                StartCoroutine(DelayedDestroy());
             }
+
+            private IEnumerator DelayedDestroy()
+            {
+                float time = 0f;
+                float reciprocal = 1f / _data.HealthBarDelayTime;
+
+                while (time < _data.HealthBarDelayTime)
+                {
+                    yield return null;
+                    time += Time.deltaTime;
+                }
+
+                if (_destroyedEffect != null)
+                {
+                    var effect = PoolSystem.Instance.GetInstance<ParticleSystem>(_destroyedEffect);
+                    effect.time = 0.0f;
+                    effect.Play();
+                    effect.transform.position = _characterTransform.position;
+                }
+
+                Destroy(_rootObject);
+                //_objectPool.ReturnToPool(this);
+            }
+
+            //public void SetPool(ObjectPool pool)
+            //{
+            //    _objectPool = pool;
+            //}
+
+            //public void SetOnDeathHandler(System.Action onDeath)
+            //{
+            //    if (_onDeathAction != null)
+            //        _health.OnDeath -= _onDeathAction;
+
+            //    _onDeathAction = onDeath;
+            //    _health.OnDeath += _onDeathAction;
+            //}
         }
     }
 }

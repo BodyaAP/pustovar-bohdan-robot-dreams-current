@@ -18,6 +18,7 @@ namespace MyLesson19
             [SerializeField] private EnemyController _enemyController;
             [SerializeField] private int _maxEnemies;
             [SerializeField] private float _spawnDelay;
+            [SerializeField] private ObjectPool _objectPool;
 
             private List<EnemyController> _enemies;
 
@@ -88,10 +89,22 @@ namespace MyLesson19
                 }
 
                 EnemyController enemy = Instantiate(_enemyController, _hit.position, Quaternion.identity);
+                //EnemyController enemy = _objectPool.GetFromPool();
+                //enemy.transform.position = _hit.position;
+                //enemy.transform.rotation = Quaternion.identity;
                 enemy.Initialize(this, _cameraSystem.Camera);
 
                 _healthService.AddCharacter(enemy.Health);
+
                 enemy.Health.OnDeath += () => EnemyDeathHandler(enemy);
+
+                //enemy.SetOnDeathHandler(() => EnemyDeathHandler(enemy));
+
+
+                //if (enemy != null)
+                //{
+                //    enemy.SetPool(_objectPool);
+                //}
 
                 _enemies.Add(enemy);
             }
@@ -130,6 +143,8 @@ namespace MyLesson19
 
             private void EnemyDeathHandler(EnemyController enemy)
             {
+                //_healthService.RemoveCharacter(enemy.Health);
+                //_objectPool.ReturnToPool(enemy);
                 _enemies.Remove(enemy);
             }
         }

@@ -11,6 +11,7 @@ namespace MyLesson19
             Search,
             Death,
             Melee,
+            Storm,
         }
     }
 }

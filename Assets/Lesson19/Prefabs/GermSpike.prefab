@@ -937,6 +937,8 @@ MonoBehaviour:
     color: {r: 0, g: 0, b: 0, a: 0}
   - state: 6
     color: {r: 0.7735849, g: 0, b: 0.6068195, a: 0}
+  - state: 7
+    color: {r: 0, g: 1, b: 0.8210938, a: 0}
 --- !u!114 &3512436142646992073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -964,6 +966,8 @@ MonoBehaviour:
   _playerdar: {fileID: 890590310369661897}
   _patrolStamina: 0
   _currentBehaviour: 0
+  _destroyedEffect: {fileID: 198321120434662062, guid: acae5746b2775f943b62a93be57b6f05, type: 3}
+  _isStormtrooper: 1
 --- !u!114 &8306445774293738233
 MonoBehaviour:
   m_ObjectHideFlags: 0

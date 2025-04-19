@@ -29,6 +29,7 @@ namespace MyLesson19
             private IPlayerService _playerService;
 
             private TargetableBase _currentTarget;
+            private Vector3 _stormTarget;
             private bool _hasTarget;
             private bool _seesTarget;
             private Vector3 _lastTargetPosition;
@@ -50,6 +51,7 @@ namespace MyLesson19
             }
 
             public TargetableBase CurrentTarget => _currentTarget;
+            public Vector3 StormTarget => _stormTarget;
             public bool HasTarget => _hasTarget;
             public bool SeesTarget => _seesTarget;
             public Vector3 LastTargetPosition => _lastTargetPosition;
@@ -63,6 +65,7 @@ namespace MyLesson19
                 _cosine = Mathf.Cos(_angle * Mathf.Deg2Rad);
 
                 _enemyController.Health.OnHealthChanged += HealthChangedHandler;
+                _stormTarget = new Vector3(15, 0, 50); //Погане рішення
             }
 
             private void FixedUpdate()
