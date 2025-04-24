@@ -58,14 +58,21 @@ namespace MyLesson19
 
             public float DistanceTarget => _distanceTarget;
 
-            private void Start()
+            private void OnEnable()
             {
                 _transform = transform;
                 _playerService = ServiceLocator.Instance.GetService<IPlayerService>();
                 _cosine = Mathf.Cos(_angle * Mathf.Deg2Rad);
 
                 _enemyController.Health.OnHealthChanged += HealthChangedHandler;
-                _stormTarget = new Vector3(15, 0, 50); //Погане рішення
+                _stormTarget = new Vector3(15, 0, 50); //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+            }
+
+            private void OnDisable()
+            {
+                _enemyController.Health.OnHealthChanged -= HealthChangedHandler;
+                _hasTarget = false;
+                _seesTarget = false;
             }
 
             private void FixedUpdate()
@@ -150,8 +157,8 @@ namespace MyLesson19
                     {
                         _hasTarget = true;
                         _seesTarget = true;
-                        _distanceTarget = GetDistanceTarget(_currentTarget);
                         _currentTarget = _playerService.Player.Targetable;
+                        _distanceTarget = GetDistanceTarget(_currentTarget);
                         CurrentState = State.Chasing;
                     }
                     else
@@ -190,10 +197,13 @@ namespace MyLesson19
 
             private float GetDistanceTarget(TargetableBase targetable)
             {
+                if (targetable == null)
+                    return 1000;
+                
                 Vector3 position = _transform.position;
                 Vector3 playerPosition = targetable.TargetPivot.position;
 
-                return targetable != null ? Vector3.Distance(position, playerPosition) : 1000;
+                return Vector3.Distance(position, playerPosition);
             }
 
             private void HealthChangedHandler(int health)
