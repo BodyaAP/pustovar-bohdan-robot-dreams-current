@@ -49,9 +49,9 @@ namespace MyLesson19
                     time += Time.deltaTime;
                 }
 
-                EvaluateFall(1f);
+                Destroy(_rootObject);
 
-                //Destroy(_rootObject);
+                EvaluateFall(1f);
 
                 ServiceLocator.Instance.GetService<StateMachineSystem.InputController>().enabled = false;
                 ServiceLocator.Instance.GetService<ISaturationService>().SetDeathSaturation();

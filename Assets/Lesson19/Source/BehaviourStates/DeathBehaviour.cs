@@ -32,16 +32,16 @@ namespace BehaviourTreeSystem.BehaviourStates
         {
             base.OnUpdate(deltaTime);
 
-            if (_time < enemyController.Data.HealthBarDelayTime)
-            {
-                _time += deltaTime;
-                EvaluateFall(_time * _reciprocal);
-                return;
-            }
+            //if (_time < enemyController.Data.HealthBarDelayTime)
+            //{
+            //    _time += deltaTime;
+            //    EvaluateFall(_time * _reciprocal);
+            //    return;
+            //}
             
-            EvaluateFall(1f);
+            //EvaluateFall(1f);
 
-            Object.Destroy(enemyController.RootObject);
+            //Object.Destroy(enemyController.RootObject);
         }
 
         public override void Dispose()

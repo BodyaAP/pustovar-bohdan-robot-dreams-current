@@ -42,7 +42,8 @@ namespace MyLesson19
             [SerializeField] private bool _isStormtrooper = false;
 
             private INavPointProvider _navPointProvider;
-            //private ObjectPool _objectPool;
+
+            private ObjectPool _objectPool;
             //private System.Action _onDeathAction;
 
             protected BehaviourTree _behaviourTree;
@@ -85,12 +86,17 @@ namespace MyLesson19
 
                 _health.OnDeath += HealthDeathHandler;
 
-                PoolSystem.Create();
+                //PoolSystem.Create();
 
-                if (_destroyedEffect != null)
-                {
-                    PoolSystem.Instance.InitPool(_destroyedEffect, 16);
-                }
+                //if (_destroyedEffect != null)
+                //{
+                //    PoolSystem.Instance.InitPool(_destroyedEffect, 16);
+                //}
+            }
+
+            private void OnDestroy()
+            {
+                Debug.Log($"Enemy Destroyed: {gameObject.name}");
             }
 
             protected virtual void InitStateMachine()
@@ -162,6 +168,12 @@ namespace MyLesson19
                 //Debug.Log($"Enemy state changed: {_currentBehaviour}");
             }
 
+            public void Respawn()
+            {
+                _health.SetHealth(_health.MaxHealthValue);
+                _behaviourMachine.ForceState((byte)EnemyBehaviour.Deciding);
+            }
+            
             public void Initialize(INavPointProvider navPointProvider, Camera camera)
             {
                 _navPointProvider = navPointProvider;
@@ -214,11 +226,9 @@ namespace MyLesson19
 
             protected void HealthDeathHandler()
             {
-                _behaviourTree = null;
+                //_behaviourTree = null;
                 _behaviourMachine.ForceState((byte)EnemyBehaviour.Death);
                 ServiceLocator.Instance.GetService<IHealthService>().RemoveCharacter(_health);
-
-
 
                 StartCoroutine(DelayedDestroy());
             }
@@ -234,22 +244,22 @@ namespace MyLesson19
                     time += Time.deltaTime;
                 }
 
-                if (_destroyedEffect != null)
-                {
-                    var effect = PoolSystem.Instance.GetInstance<ParticleSystem>(_destroyedEffect);
-                    effect.time = 0.0f;
-                    effect.Play();
-                    effect.transform.position = _characterTransform.position;
-                }
+                //if (_destroyedEffect != null)
+                //{
+                //    var effect = PoolSystem.Instance.GetInstance<ParticleSystem>(_destroyedEffect);
+                //    effect.time = 0.0f;
+                //    effect.Play();
+                //    effect.transform.position = _characterTransform.position;
+                //}
 
-                Destroy(_rootObject);
-                //_objectPool.ReturnToPool(this);
+                //Destroy(_rootObject);
+                _objectPool.ReturnToPool(this);
             }
 
-            //public void SetPool(ObjectPool pool)
-            //{
-            //    _objectPool = pool;
-            //}
+            public void SetPool(ObjectPool pool)
+            {
+                _objectPool = pool;
+            }
 
             //public void SetOnDeathHandler(System.Action onDeath)
             //{

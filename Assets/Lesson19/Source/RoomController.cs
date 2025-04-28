@@ -88,11 +88,13 @@ namespace MyLesson19
                     GetPointInternal();
                 }
 
-                EnemyController enemy = Instantiate(_enemyController, _hit.position, Quaternion.identity);
-                //EnemyController enemy = _objectPool.GetFromPool();
+                //EnemyController enemy = Instantiate(_enemyController, _hit.position, Quaternion.identity);
+                EnemyController enemy = _objectPool.GetFromPool(_hit.position, Quaternion.identity);
                 //enemy.transform.position = _hit.position;
                 //enemy.transform.rotation = Quaternion.identity;
                 enemy.Initialize(this, _cameraSystem.Camera);
+
+                enemy.Respawn();
 
                 _healthService.AddCharacter(enemy.Health);
 
@@ -101,10 +103,10 @@ namespace MyLesson19
                 //enemy.SetOnDeathHandler(() => EnemyDeathHandler(enemy));
 
 
-                //if (enemy != null)
-                //{
-                //    enemy.SetPool(_objectPool);
-                //}
+                if (enemy != null)
+                {
+                    enemy.SetPool(_objectPool);
+                }
 
                 _enemies.Add(enemy);
             }
