@@ -24,6 +24,10 @@ namespace MyLesson19
             [SerializeField] private ExplosionController _explosionParticles;
             [SerializeField] private bool _breakOnSpawn;
 
+            [SerializeField] private AudioSource _audioSource;
+            [SerializeField] private AudioClip _audioExplosion;
+            [SerializeField] private AudioClip _audioThrow;
+
             private HashSet<Grenade> _grenades = new();
 
             private Vector3 _lastGrenadePosition;
@@ -57,6 +61,7 @@ namespace MyLesson19
                 _grenades.Add(grenade);
 
                 InvokeOnGrenadeSpawned(grenade);
+                _audioSource.PlayOneShot(_audioThrow);
 
                 if (_breakOnSpawn)
                     Debug.Break();
@@ -72,6 +77,7 @@ namespace MyLesson19
                 _lastGrenadePosition = grenade.Position;
                 _lastGrenadeRadius = grenade.ExplosionRadius;
                 _grenades.Remove(grenade);
+                _audioSource.PlayOneShot(_audioExplosion);
             }
 
             private void OnDrawGizmos()

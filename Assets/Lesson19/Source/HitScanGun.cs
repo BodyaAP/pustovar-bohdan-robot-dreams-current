@@ -30,6 +30,16 @@ namespace MyLesson19
 
             [SerializeField] protected float _meleeDistance;
 
+            [SerializeField] private GameObject _muzzleFlashPrefab;
+            [SerializeField] private bool _unparentMuzzleFlash;
+            [SerializeField] private GameObject _impactVfx;
+            [SerializeField] private float _impactVfxLifetime = 5f;
+            [SerializeField] private float _impactVfsSpawnOffset = 0.1f;
+
+            [SerializeField] private AudioSource _audioSource;
+            [SerializeField] private AudioClip _audioShoot;
+
+
             protected int _tilingId;
 
             protected virtual void Start()
@@ -43,11 +53,36 @@ namespace MyLesson19
                 Vector3 muzzleForward = _muzzleTransform.forward;
                 Ray ray = new Ray(muzzlePosition, muzzleForward);
                 Vector3 hitPoint = muzzlePosition + muzzleForward * _range;
+
+                if (_muzzleFlashPrefab != null)
+                {
+                    GameObject muzzleFlashInstance =
+                        Instantiate(_muzzleFlashPrefab, muzzlePosition, _muzzleTransform.rotation, _muzzleTransform);
+
+                    if (_unparentMuzzleFlash)
+                    {
+                        muzzleFlashInstance.transform.SetParent(null);
+                    }
+
+                    Destroy(muzzleFlashInstance, 2f);
+                }
+
                 if (Physics.SphereCast(ray, _shotRadius, out RaycastHit hitInfo, _range, _layerMask))
                 {
                     Vector3 directVector = hitInfo.point - _muzzleTransform.position;
                     Vector3 rayVector = Vector3.Project(directVector, ray.direction);
                     hitPoint = muzzlePosition + rayVector;
+
+                    if (_impactVfx)
+                    {
+                        GameObject impactVfxInstance = Instantiate(_impactVfx,
+                            hitInfo.point + (hitInfo.normal * _impactVfsSpawnOffset),
+                            UnityEngine.Quaternion.LookRotation(hitInfo.normal));
+                        if (_impactVfxLifetime > 0)
+                        {
+                            Destroy(impactVfxInstance.gameObject, _impactVfxLifetime);
+                        }
+                    }
 
                     OnHit?.Invoke(hitInfo.collider);
                 }
@@ -56,6 +91,8 @@ namespace MyLesson19
                 shot.distance = (hitPoint - _muzzleTransform.position).magnitude;
                 shot.outerPropertyBlock = new MaterialPropertyBlock();
                 StartCoroutine(ShotRoutine(shot));
+
+                _audioSource.PlayOneShot(_audioShoot);
 
                 OnShot?.Invoke();
             }

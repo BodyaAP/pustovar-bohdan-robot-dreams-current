@@ -18,16 +18,24 @@ namespace MyLesson19
             private Vector3 _direction;
             private float _drag;
 
+            private AudioSource _audioSource;
+            private AudioClip _land;
+
             public FallState(
                 StateMachine stateMachine,
                 byte stateId,
                 CharacterController characterController,
-                float drag) : base(stateMachine, stateId)
+                float drag,
+                AudioSource audioSource,
+                AudioClip land) : base(stateMachine, stateId)
             {
                 _characterController = characterController;
                 _drag = drag;
 
                 conditions = new List<IStateCondition> { new BaseCondition((byte)LocomotionState.Idle, Landed) };
+                
+                _audioSource = audioSource;
+                _land = land;
             }
 
             public override void Enter()
@@ -49,6 +57,8 @@ namespace MyLesson19
                 //Debug.Log($"[FallState] Velocity: {_velocity}");
 
                 _ = _characterController.Move(_velocity * deltaTime);
+
+                _audioSource.PlayOneShot(_land);
             }
 
             public override void Dispose()

@@ -470,6 +470,7 @@ GameObject:
   - component: {fileID: 5613695266665286150}
   - component: {fileID: 2251712387422176276}
   - component: {fileID: 975045111626592835}
+  - component: {fileID: 8545194218917573567}
   m_Layer: 0
   m_Name: Blaster
   m_TagString: Untagged
@@ -517,6 +518,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   _meleeDistance: 2
+  _muzzleFlashPrefab: {fileID: 748781637555137343, guid: f2c18de48b3b1b74d991eefecae91b18, type: 3}
+  _unparentMuzzleFlash: 0
+  _impactVfx: {fileID: 7655095426451682942, guid: 2f29416703d90aa48bebbc4844787a27, type: 3}
+  _impactVfxLifetime: 5
+  _impactVfsSpawnOffset: 0.1
+  _audioSource: {fileID: 8545194218917573567}
+  _audioShoot: {fileID: 8300000, guid: 6534a4fc3c469024da48701955fa29b2, type: 3}
 --- !u!114 &975045111626592835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -531,6 +539,102 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gun: {fileID: 2251712387422176276}
   _data: {fileID: 11400000, guid: 9dbf484f6945dfb4fb52408e255f8872, type: 2}
+--- !u!82 &8545194218917573567
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9215796237459151113}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 24300002, guid: c701c7dd51650c84b93ad71f8275e333, type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &996711606290169540
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -666,6 +770,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   _meleeDistance: 0
+  _muzzleFlashPrefab: {fileID: 0}
+  _unparentMuzzleFlash: 0
+  _impactVfx: {fileID: 0}
+  _impactVfxLifetime: 5
+  _impactVfsSpawnOffset: 0.1
+  _audioSource: {fileID: 0}
+  _audioShoot: {fileID: 0}
 --- !u!114 &2151045581870211617
 MonoBehaviour:
   m_ObjectHideFlags: 0

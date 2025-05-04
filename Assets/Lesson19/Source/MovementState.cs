@@ -12,6 +12,9 @@ namespace MyLesson19
             private readonly Transform _transform;
             private readonly float _speed;
 
+            private readonly AudioSource _source;
+            private readonly AudioClip _footstep;
+
             private bool _grounded;
 
             private Vector3 _localDirection;
@@ -23,11 +26,16 @@ namespace MyLesson19
                 byte stateId,
                 CharacterController characterController,
                 Transform transform,
-                float speed) : base(stateMachine, stateId)
+                float speed,
+                AudioSource source,
+                AudioClip footstep) : base(stateMachine, stateId)
             {
                 _characterController = characterController;
                 _transform = transform;
                 _speed = speed;
+
+                _source = source;
+                _footstep = footstep;
 
                 conditions = new List<IStateCondition>
                 {
@@ -54,6 +62,8 @@ namespace MyLesson19
 
                 //_grounded = _characterController.SimpleMove(direction * _speed);
                 _ = _characterController.Move((direction * _speed + Physics.gravity) * deltaTime);
+
+                _source.PlayOneShot(_footstep);
             }
 
             public override void Dispose()

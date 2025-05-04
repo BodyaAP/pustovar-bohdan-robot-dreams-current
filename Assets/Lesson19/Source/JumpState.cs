@@ -15,11 +15,15 @@ namespace MyLesson19
             private float _horizontalJumpSpeed;
             private float _drag;
 
+            private AudioSource _audioSource;
+            private AudioClip _jump;
+
             public JumpState(
                 StateMachine stateMachine,
                 byte stateId,
                 CharacterController characterController,
-                float drag, float verticalJumpSpeed, float horizontalJumpSpeed) : base(stateMachine, stateId)
+                float drag, float verticalJumpSpeed, float horizontalJumpSpeed,
+                AudioSource audioSource, AudioClip jump) : base(stateMachine, stateId)
             {
                 _characterController = characterController;
                 _drag = drag;
@@ -27,6 +31,9 @@ namespace MyLesson19
                 _horizontalJumpSpeed = horizontalJumpSpeed;
 
                 conditions = new List<IStateCondition> { new BaseCondition((byte)LocomotionState.Fall, JumpComplete) };
+                
+                _audioSource = audioSource;
+                _jump = jump;
             }
 
             public override void Enter()
@@ -49,6 +56,7 @@ namespace MyLesson19
                 _velocity += Physics.gravity * deltaTime;
 
                 _ = _characterController.Move(_velocity * deltaTime);
+                _audioSource.PlayOneShot(_jump);
             }
 
             public override void Dispose()

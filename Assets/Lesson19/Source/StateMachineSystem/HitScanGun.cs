@@ -33,6 +33,9 @@ namespace MyLesson19
             [SerializeField] private float _impactVfxLifetime = 5f;
             [SerializeField] private float _impactVfsSpawnOffset = 0.1f;
 
+            [SerializeField] private AudioSource _audioSource;
+            [SerializeField] private AudioClip _audioShoot;
+
             protected int _tilingId;
             private bool isLeftGunBarrel = true;
 
@@ -100,6 +103,8 @@ namespace MyLesson19
                 HitscanShotAspect shot = Instantiate(_shotPrefab, hitPoint, muzzle.rotation);
                 shot.distance = (hitPoint - muzzle.position).magnitude;
                 shot.outerPropertyBlock = new MaterialPropertyBlock();
+
+                _audioSource.PlayOneShot(_audioShoot);
 
                 isLeftGunBarrel = !isLeftGunBarrel;
 
